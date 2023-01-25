@@ -1,6 +1,6 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-    if (to.params.id === '1') {
-      return abortNavigation()
+export default defineNuxtRouteMiddleware(async (to, from) => {
+    const loginData = useLoginState();
+    if (!loginData.value.isAuth) {
+      return navigateTo('/login')
     }
-    return navigateTo('/')
-})
+});

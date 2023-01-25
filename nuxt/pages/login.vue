@@ -21,12 +21,19 @@
     const password = ref("");
     const router = useRouter();
 
+    const loginData = useLoginState();
+
     const loginHandler = async () => {
         await axios.get(`${runtimeConfig.public.urlSecret}/sanctum/csrf-cookie`).then(() => {
             axios.post(`${runtimeConfig.public.urlSecret}/login`, {
                 email: email.value,
                 password: password.value
             }).then(() => {
+                axios.get(`${runtimeConfig.public.apiSecret}/user`).then((response) => {
+                    loginData.value.name = response.data.name;
+                    loginData.value.email = response.data.email;
+                    loginData.value.isAuth = true;
+                })
                 router.push('/');
             });
         });
